@@ -1,5 +1,7 @@
-my_bot/
+.my_bot/
+
+.venv/
+.env
+.test/
 
 __*__/
-
-.env
