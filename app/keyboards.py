@@ -1,6 +1,6 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
-admin_panel = ReplyKeyboardMarkup(
+admin_panel_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="ℹ️ Информация о сообщении"),KeyboardButton(text="🚫 Запретить публикацию на время")],
         [KeyboardButton(text="👮 Заблокировать/Разблокировать"), KeyboardButton(text="☠ Удалить пользователя из БД")]
@@ -10,7 +10,7 @@ admin_panel = ReplyKeyboardMarkup(
     is_persistent=True
 )
 
-block_or_unblock = InlineKeyboardMarkup(
+block_or_unblock_keyboard = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(text="❌ Заблокировать", callback_data="block"),
