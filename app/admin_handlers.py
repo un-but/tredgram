@@ -2,11 +2,11 @@ from datetime import datetime
 
 from aiogram import F, Router
 from aiogram.filters import CommandStart
-from aiogram.types import Message, CallbackQuery, ContentType
+from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
-import app.db as db
 from constants import ADMINS_ID
+from app.db import db_delete, db_read, db_update
 from app.keyboards import admin_panel_keyboard, ban_or_unban_inline_keyboard, delete_user_info_keyboard
 from app.states import MessageInfo, ProhibitSending, Ban_Or_Unban, DeleteUserInfo
 
@@ -34,7 +34,7 @@ async def info_button_handler(message: Message, state: FSMContext) -> None:
 @router.message(MessageInfo.next_step)
 async def send_info_about_user(message: Message, state: FSMContext) -> None:
     await state.clear()
-    user_info = db.get_user_info_by_message_id(message)
+    user_info = db_read.get_user_info_by_message_id(message)
     if user_info:
         await message.answer((f"Ник - {"@" + str(user_info[1])}\n"
                             f"ID - {user_info[2]}\n"
@@ -65,7 +65,7 @@ async def prohibit_sending_for_minutes(message: Message, state: FSMContext) -> N
     literal = message.text[-1]
     if seconds.isdigit() and literal in literals:
         prohibit_sending_time = message.date.timestamp() + int(seconds) * literals[literal]
-        db.set_prohibit_sending_time(prohibit_sending_time)
+        db_update.set_prohibit_sending_time(prohibit_sending_time)
         await message.answer(
             f"Запрет на отправку сообщений будет действовать до {datetime.fromtimestamp(prohibit_sending_time).strftime("%H:%M:%S %d.%m.%Y")}."
         )
@@ -97,7 +97,7 @@ async def ban_or_unban_callback_handler(callback: CallbackQuery, state: FSMConte
 async def ban_or_unban_user(message: Message, state: FSMContext) -> None:
     is_banned = (await state.get_data())["ban_value"]
     await state.clear()
-    if db.set_is_banned_value(message.text, is_banned):
+    if db_update.set_is_banned_value(message.text, is_banned):
         await message.answer(
             "Пользователь успешно заблокирован" if is_banned == 1 else "Пользователь успешно разблокирован"
         )
@@ -133,7 +133,7 @@ async def delete_user_info_agree_handler(callback: CallbackQuery, state: FSMCont
 @router.message(DeleteUserInfo.next_step)
 async def delete_user_info(message: Message, state: FSMContext) -> None:
     await state.clear()
-    if db.delete_user_info_from_db(message.text):
+    if db_delete.delete_user_info_from_db(message.text):
         await message.answer(
             "Все сохраненные данные о пользователе удалены."
         )
