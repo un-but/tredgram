@@ -1,22 +1,21 @@
-import sqlite3
-from aiogram.types import Message
+import aiosqlite
 
 
-def delete_user_info_from_db(username_or_id: str) -> True | False:
-    con = sqlite3.connect("users_data.db")
-    cur = con.cursor()
-    try:
+async def delete_user_info_from_db(username_or_id: str) -> True | False:
+    async with aiosqlite.connect("users_data.db") as db:
         if username_or_id.isdigit():
-            cur.execute("SELECT * FROM users WHERE user_id = ?", (username_or_id,)).fetchall()[0] # error call
-            user_id = int(username_or_id)
+            async with db.execute("SELECT * FROM users WHERE user_id = ?", (username_or_id,)) as cur:
+                if await cur.fetchall():
+                    user_id = int(username_or_id)
+                else:
+                    return False
         else:
-            user_id = cur.execute("SELECT user_id FROM users WHERE username = ?", (username_or_id.replace("@", ""),)).fetchall()[0]
-        cur.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
-        cur.execute("DELETE FROM messages WHERE user_id = ?", (user_id,))
-    except IndexError:
-        return False
-    else:
+            async with db.execute("SELECT user_id FROM users WHERE username = ?", (username_or_id,)) as cur:
+                if user_id := await cur.fetchone():
+                    user_id = user_id[0]
+                else:
+                    return False
+        await db.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+        await db.execute("DELETE FROM messages WHERE user_id = ?", (user_id,))
+        await db.commit()
         return True
-    finally:
-        con.commit()
-        con.close()
