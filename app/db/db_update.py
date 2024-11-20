@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import aiosqlite
 
 
-async def set_prohibit_sending_time(value) -> None:
+async def set_prohibit_sending_time(value: float) -> None:
     async with aiosqlite.connect("users_data.db") as db:
         await db.execute("UPDATE globals SET prohibit_sending_time = ?", (value,))
         await db.commit()

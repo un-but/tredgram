@@ -38,7 +38,7 @@ async def init_db(bot: User) -> None:
             if not await cur.fetchall():
                 await db.execute(
                     "INSERT INTO globals (prohibit_sending_time, bot_id, bot_name, bot_username) VALUES (?, ?, ?, ?)",
-                    (0, bot_info.id, bot_info.first_name, bot_info.username)
+                    (0, bot_info.id, bot_info.first_name, bot_info.username),
                 )
         await db.commit()
 
@@ -51,11 +51,11 @@ async def add_new_user_to_db(message: Message) -> None:
             message.from_user.first_name,
             message.from_user.last_name,
             message.from_user.language_code,
-            0
+            0,
         )
         await db.execute(
             "INSERT INTO users (username, user_id, first_name, last_name, language, is_banned) VALUES (?, ?, ?, ?, ?, ?)",
-            values
+            values,
         )
         await db.commit()
 

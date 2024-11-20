@@ -1,14 +1,16 @@
+from __future__ import annotations
+
 import aiosqlite
 from aiogram.types import Message
 
 
-async def check_for_user_existence(user_id) -> bool:
+async def check_for_user_existence(user_id: int) -> bool:
     async with aiosqlite.connect("users_data.db") as db:
         async with db.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)) as cur:
             return bool(await cur.fetchall())
 
 
-async def check_user_for_ban(user_id) -> bool:
+async def check_user_for_ban(user_id: int) -> bool:
     async with aiosqlite.connect("users_data.db") as db:
         async with db.execute("SELECT is_banned FROM users WHERE user_id = ?", (user_id,)) as cur:
             return bool((await cur.fetchone())[0])
@@ -18,7 +20,7 @@ async def check_user_for_ban(user_id) -> bool:
 async def check_time_for_sending(message: Message) -> bool:
     async with aiosqlite.connect("users_data.db") as db:
         async with db.execute(
-            "SELECT message_time FROM messages WHERE user_id = ? ORDER BY id DESC LIMIT 1", (message.from_user.id,)
+            "SELECT message_time FROM messages WHERE user_id = ? ORDER BY id DESC LIMIT 1", (message.from_user.id,),
         ) as cur:
             return message.date.timestamp() - (await cur.fetchone())[0] > 900
 
