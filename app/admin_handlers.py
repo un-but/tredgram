@@ -40,7 +40,7 @@ async def send_info_about_user(message: Message, state: FSMContext) -> None:
                             f"ID - {user_info[2]}\n"
                             f"Имя - {str(user_info[3]) + " " + str(user_info[4])}\n"
                             f"Язык - {user_info[5]}\n"
-                            f"Блокировка - {user_info[6] == 1}").replace("None", "")
+                            f"Блокировка - {user_info[6] == 1}").replace("None", ""),
         )
     else:
         await message.answer(
