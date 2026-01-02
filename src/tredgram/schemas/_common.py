@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict, model_validator
 from sqlalchemy.orm import DeclarativeBase
+
+USER_INCLUDE_TYPE = Literal["posts"]
 
 
 class BaseSchema(BaseModel):

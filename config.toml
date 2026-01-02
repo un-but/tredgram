@@ -1,0 +1,5 @@
+[bot]
+min_send_interval = 300
+
+[database]
+echo = false

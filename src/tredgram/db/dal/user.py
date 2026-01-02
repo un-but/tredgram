@@ -7,14 +7,13 @@ from typing import TYPE_CHECKING
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 from sqlalchemy.sql.base import ExecutableOption
-from unknown_project.db.models import CommentModel, PostModel, UserModel
+from tredgram.db.models import UserModel
 
 if TYPE_CHECKING:
-    import uuid
     from collections.abc import Sequence
 
     from sqlalchemy.ext.asyncio import AsyncSession
-    from unknown_project.schemas import USER_INCLUDE_TYPE, UserCreate, UserUpdate
+    from tredgram.schemas import USER_INCLUDE_TYPE, UserCreate, UserUpdate
 
 
 class UserDAL:
@@ -27,18 +26,16 @@ class UserDAL:
         session.add(user)
         await session.commit()
 
-        return await UserDAL.get_by_id(user.id, session, ("comments", "posts"))
+        return await UserDAL.get_by_id(user.id, session, ("posts",))
 
     @staticmethod
     async def get_by_id(
-        user_id: uuid.UUID,
+        user_id: int,
         session: AsyncSession,
         include: tuple[USER_INCLUDE_TYPE, ...] = (),
     ) -> UserModel:
         if user := await session.scalar(
-            select(UserModel)
-            .where(UserModel.id == user_id)
-            .options(*UserDAL._gen_opts(include)),
+            select(UserModel).where(UserModel.id == user_id).options(*UserDAL._gen_opts(include)),
         ):
             return user
 
@@ -46,14 +43,14 @@ class UserDAL:
         raise LookupError(msg)
 
     @staticmethod
-    async def get_with_email(
-        email: str,
+    async def get_with_username(
+        username: str,
         session: AsyncSession,
         include: tuple[USER_INCLUDE_TYPE, ...] = (),
     ) -> UserModel:
         if user := await session.scalar(
             select(UserModel)
-            .where(UserModel.email == email)
+            .where(UserModel.username == username)
             .options(*UserDAL._gen_opts(include))
         ):
             return user
@@ -66,14 +63,12 @@ class UserDAL:
         session: AsyncSession,
         include: tuple[USER_INCLUDE_TYPE, ...] = (),
     ) -> Sequence[UserModel]:
-        users = await session.scalars(
-            select(UserModel).options(*UserDAL._gen_opts(include))
-        )
+        users = await session.scalars(select(UserModel).options(*UserDAL._gen_opts(include)))
         return users.unique().all()
 
     @staticmethod
     async def update(
-        user_id: uuid.UUID,
+        user_id: int,
         update_info: UserUpdate,
         session: AsyncSession,
     ) -> UserModel:
@@ -83,17 +78,17 @@ class UserDAL:
             setattr(user, field, value)
 
         await session.commit()
-        return await UserDAL.get_by_id(user.id, session, ("comments", "posts"))
+        return await UserDAL.get_by_id(user.id, session, ("posts",))
 
     @staticmethod
-    async def deactivate(user_id: uuid.UUID, session: AsyncSession) -> None:
+    async def ban(user_id: int, session: AsyncSession) -> None:
         user = await UserDAL.get_by_id(user_id, session)
 
         user.is_active = False
         await session.commit()
 
     @staticmethod
-    async def drop(user_id: uuid.UUID, session: AsyncSession) -> None:
+    async def drop(user_id: int, session: AsyncSession) -> None:
         user = await UserDAL.get_by_id(user_id, session)
 
         await session.delete(user)
@@ -104,11 +99,6 @@ class UserDAL:
         options: list[ExecutableOption] = []
 
         if "posts" in include:
-            options.append(selectinload(UserModel.posts).joinedload(PostModel.comments))
-
-        if "comments" in include:
-            options.append(
-                selectinload(UserModel.comments).joinedload(CommentModel.post)
-            )
+            options.append(selectinload(UserModel.posts))
 
         return options

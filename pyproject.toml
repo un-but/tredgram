@@ -42,7 +42,7 @@ reportPrivateLocalImportUsage = "none" # Отключает ошибку при 
 reportUnusedCallResult = "none" # Отключает ошибку при несохранении результата вызова функции
 reportImplicitStringConcatenation = "none" # Отключает ошибку при неявной конкатенации строк
 reportUninitializedInstanceVariable = "none" # Отключает ошибку неинициализированной переменной
-# reportMissingTypeStubs = "warning"
+reportMissingTypeStubs = "none" # Отключает ошибку при отсутствии stubs (.pyi файлов)
 
 [tool.ruff]
 src = ["src/tredgram"]

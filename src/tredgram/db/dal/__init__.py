@@ -5,5 +5,5 @@
 
 from __future__ import annotations
 
-from __replace__.db.dal.post import PostDAL
-from __replace__.db.dal.user import UserDAL
+from tredgram.db.dal.post import PostDAL
+from tredgram.db.dal.user import UserDAL

@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import uuid
 from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 from sqlalchemy import select
-from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.base import ExecutableOption
 from tredgram.db.models import PostModel
 
@@ -22,7 +21,7 @@ class PostDAL:
     _default_opts: tuple[ExecutableOption, ...] = (joinedload(PostModel.user),)
 
     @staticmethod
-    async def create(user_id: uuid.UUID, post_info: PostCreate, session: AsyncSession) -> PostModel:
+    async def create(user_id: int, post_info: PostCreate, session: AsyncSession) -> PostModel:
         post = PostModel(user_id=user_id, **post_info.model_dump())
 
         session.add(post)
@@ -65,7 +64,7 @@ class PostDAL:
         return await PostDAL.get_by_id(post.id, session)
 
     @staticmethod
-    async def drop(post_id: uuid.UUID, session: AsyncSession) -> None:
+    async def drop(post_id: int, session: AsyncSession) -> None:
         post = await PostDAL.get_by_id(post_id, session)
 
         await session.delete(post)

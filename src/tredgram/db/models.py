@@ -42,7 +42,7 @@ class BaseModel(DeclarativeBase):
 class UserModel(BaseModel):
     """Модель пользователя."""
 
-    tg_id: Mapped[BigInteger] = mapped_column(BigInteger, primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     username: Mapped[str]
@@ -64,7 +64,7 @@ class UserModel(BaseModel):
 class PostModel(BaseModel):
     """Модель поста."""
 
-    id: Mapped[BigInteger] = mapped_column(BigInteger, primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     content: Mapped[str] = mapped_column(String(1000))

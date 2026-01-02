@@ -15,11 +15,12 @@ from __future__ import annotations
 
 import os
 import tomllib
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, Literal, get_type_hints, override
 
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -42,6 +43,18 @@ class BotConfig(PydanticBaseModel):
 
     tg_token: SecretStr = Field(**source("env"))
     webhook_url: SecretStr = Field(**source("env"))
+
+    min_send_interval: datetime = Field(**source("toml"))
+
+    @field_validator("min_send_interval", mode="before")
+    def parse_unix_timestamp(cls, value: Any) -> datetime:
+        if isinstance(value, (str, int, float)):
+            try:
+                return timedelta(seconds=int(value))
+            except (ValueError, TypeError):
+                msg = f"Некорректный формат Unix timestamp: {value}"
+                raise ValueError(msg)
+        return value
 
 
 class DatabaseConfig(PydanticBaseModel):
