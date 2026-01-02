@@ -1,0 +1,120 @@
+[project]
+name = "tredgram"
+version = "1.0.0"
+description = "TredGram is a social network with recommendations in Telegram"
+authors = [
+    {name = "UnBut",email = "un_but@vk.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+    "aiogram (>=3.23.0,<4.0.0)",
+    "pydantic (>=2.12.5,<3.0.0)",
+    "sqlalchemy (>=2.0.45,<3.0.0)",
+    "asyncpg (>=0.31.0,<0.32.0)",
+    "alembic (>=1.17.2,<2.0.0)",
+    "fastapi (>=0.125.0,<0.126.0)",
+    "uvicorn (>=0.38.0,<0.39.0)",
+    "bcrypt (>=5.0.0,<6.0.0)",
+    "redis (>=7.1.0,<8.0.0)",
+    "pydantic-settings (>=2.12.0,<3.0.0)"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.13.0"
+
+[tool.setuptools]
+[tool.setuptools.packages.find]
+include = ["tredgram*"]
+
+# LSP and Linter configuration
+[tool.basedpyright]
+include = ["src", "migrations"]
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+typeCheckingMode = "recommended"
+
+reportPrivateLocalImportUsage = "none" # Отключает ошибку при импорте из модуля с __init__.py
+reportUnusedCallResult = "none" # Отключает ошибку при несохранении результата вызова функции
+reportImplicitStringConcatenation = "none" # Отключает ошибку при неявной конкатенации строк
+reportUninitializedInstanceVariable = "none" # Отключает ошибку неинициализированной переменной
+# reportMissingTypeStubs = "warning"
+
+[tool.ruff]
+src = ["src/tredgram"]
+line-length = 100
+indent-width = 4
+lint.select = ["ALL"]
+lint.ignore = [
+    "ARG003",
+    "D203",
+    "D211",
+    "D213",
+    "FAST002",
+    "FAST003",
+    "B008",
+    "D102",
+    "D103",
+    "D107",
+    "B904",
+    "COM812",
+    "ANN401",
+    "TRY400",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+]
+
+# Миграции базы данных с помощью Alembic
+[tool.alembic]
+# Путь к папке со скриптами миграций, текущая директория обозначается через %(here)s
+script_location = "%(here)s/migrations"
+
+# Шаблон, используемый для генерации имен файлов миграций, по умолчанию - %%(rev)s_%%(slug)s
+# Документация: https://alembic.sqlalchemy.org/en/latest/tutorial.html#editing-the-ini-file
+file_template = "%%(slug)s_%%(rev)s"
+
+# Путь, добавляемый к sys.path, по умолчанию текущая директория
+prepend_sys_path = ["."]
+
+# Используемый часовой пояс для названия и комментариев в файлах миграций
+# Для работы требуются python>=3.9 и alembic[tz], значение передается в ZoneInfo()
+# Оставьте пустым для местного времени
+timezone = "Europe/Moscow"
+
+# Максимальная длина сообщения к миграции, после которого оно обрезается
+truncate_slug_length = "40"
+
+# Указывает что работа файла env.py обязательна
+revision_environment = false
+
+# Установите true для использования .pyc или .pyo файлов
+sourceless = false
+
+# Список директорий для хранения версий
+version_locations = ["%(here)s/migrations/versions"]
+
+
+# Рекурсивный поиск в файлах миграций
+recursive_version_locations = false
+
+# Кодировка используемая файлами миграций
+output_encoding = "utf-8"
+
+
+# Проверка и форматирование через ruff
+[[tool.alembic.post_write_hooks]]
+name = "Ruff Formatter"
+type = "exec"
+executable = "%(here)s/.venv/bin/ruff"
+options = "format REVISION_SCRIPT_FILENAME"
+
+[[tool.alembic.post_write_hooks]]
+name = "Ruff Linter"
+type = "exec"
+executable = "%(here)s/.venv/bin/ruff"
+options = "check --fix --quiet REVISION_SCRIPT_FILENAME"

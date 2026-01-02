@@ -1,13 +1,13 @@
-.my_bot/
-
 .venv/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+__pycache__/
+
+logs/*.log*
+files/*
+*.mo
+
 .env
-.test/
 
-__*__/
-
-TODO.md
-
-users_data.db
-
-constants.py
+!.gitkeep
