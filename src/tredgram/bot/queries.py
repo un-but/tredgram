@@ -20,9 +20,7 @@ async def get_custom_statistics() -> None:
     logger.info("Report generation started")
     async with session_maker() as db:
         now = datetime.now(ZoneInfo("Europe/Moscow")).replace(tzinfo=None)
-        start_day = datetime(
-            year=now.year, month=now.month, day=23, hour=9, minute=0, second=0
-        )
+        start_day = datetime(year=now.year, month=now.month, day=23, hour=9, minute=0, second=0)
         logger.info(start_day)
 
         # Last's day question and answers

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from tredgram.schemas._common import SuccessResponse
 from tredgram.schemas._configuration import Config, config
+from tredgram.schemas.post import PostChildResponse, PostCreate, PostResponse, PostUpdate
+from tredgram.schemas.user import UserCreate, UserResponse, UserUpdate
 
-# __replace__ добавить model_rebuild в случае взаимных ссылок
-# __replace__.model_rebuild()
+UserResponse.model_rebuild()
