@@ -6,7 +6,7 @@ import logging.config
 
 from aiogram import Bot, Dispatcher
 from aiogram.utils.i18n import ConstI18nMiddleware, I18n
-from tredgram.bot.routers import handlers
+from tredgram.bot.routers import admin, user
 from tredgram.schemas import config
 
 logging.config.fileConfig("logconfig.ini")
@@ -19,7 +19,7 @@ async def start_long_polling() -> None:
 
     i18n = I18n(path="locales", default_locale="ru", domain="messages")
 
-    dp.include_router(handlers.router)
+    dp.include_routers(user.router, admin.router)
     dp.update.middleware(
         ConstI18nMiddleware(locale="ru", i18n=i18n),  # Replace when add new languages
     )

@@ -4,25 +4,103 @@ msgstr ""
 
 msgid "start message"
 msgstr ""
-"Здравствуйте! 👋\n"
-"Я — виртуальный помощник Herbalife. Готов помочь вам с вопросами по заказам, доставке, оплате, регистрации и другим темам.\n\n"
-"Пожалуйста, задайте ваш вопрос — я постараюсь ответить на него максимально точно на основе официальной базы знаний.\n\n"
-"Если я не смогу помочь — подскажу, как связаться с Онлайн Поддержкой 💬"
+"🙋Приветствую Вас в моем боте, который разработан для канала ["Название канала"](ссылка на канал)!\n"
+"Начиная пользоваться им Вы принимаете [Условия Использования](ссылка на условия использования telegraph).\n"
+"Для тех, кто не хочет их читать, краткое содержание.\n"
+"За все публикации несете ответственность ТОЛЬКО ВЫ.\n"
+"Запрещено отправлять (может карается удалением сообщения и баном):\n"
+"1. Бессмысленные или повторяющиеся по смыслу сообщения\n"
+"2. Порнографические материалы\n"
+"3. Реклама без моего согласия\n"
+"4. Сообщения нарушающие законодательство РФ\n"
+"Все другие вопросы либо уже указаны в [Условиях Использования](ссылка на условия использования telegraph).\n"
+"\n"
+"Для отправки просто введите сообщение, однако учитывайте, что премиум эмодзи в ботах не работают.\n"
 
-msgid "not authenticated"
-msgstr "😕 Авторизация не удалась."
+msgid "back to main menu button"
+msgstr "↩️ Вернуться в главное меню"
 
-msgid "message while waiting"
-msgstr "💭 Думаю над ответом..."
+msgid "check button"
+msgstr "✅ Проверить"
 
-msgid "please wait message"
-msgstr "️️⚠️ Пожалуйста дождитесь ответа ассистента!"
 
-msgid "AI answer error message"
-msgstr "😕 Упс! Не получилось обработать запрос. Попробуй ещё раз"
+########## Основное меню ##########
 
-msgid "incorrect message"
-msgstr "⚠️ Поддерживается только текст. Попробуй задать вопрос по-другому или нажми «Назад»"
+msgid "main menu placeholder"
+msgstr "👇 Выбери нужное действие"
 
-msgid "no openai connection"
-msgstr "🚨 К сожалению нам не удалось подключиться к нашей нейросети. Пожалуйста попробуйте позже"
+msgid "main menu subscribes button"
+msgstr "📚 Подписки"
+
+msgid "main menu owned channels button"
+msgstr "🗄️ Мои каналы"
+
+msgid "main menu offer_post button"
+msgstr "✉️ Предложить публикацию"
+
+
+########## Настройка подписок ##########
+
+msgid "manage subscribes message"
+msgstr ""
+"Здесь Вы можете подписаться на канал, перейти в него или удалить из подписок\n"
+"Выберите нужный канал или подпишитесь через ссылку"
+
+# Подписка на канал
+msgid "subscribe channel message"
+msgstr "✅ Вставьте ссылку на канал для подписки"
+
+msgid "subscribe channel success message"
+msgstr "🎉 Вы подписались на канал *{channel_name}*"
+
+msgid "subscribe channel failure message"
+msgstr "😢 Канал *{channel_name}* не является частью TredGram"
+
+# Управление подпиской на канал
+msgid "subscribe channel action message"
+msgstr "🔀 Выберите действие с каналом *{channel_name}*"
+
+msgid "unsubscribe channel button"
+msgstr "❌ Отписаться от канала"
+
+msgid "go to channel button"
+msgstr "🔗 Перейти в канал"
+
+
+########## Управление своими каналами ##########
+
+msgid "manage owned added channels message"
+msgstr ""
+
+msgid "manage owned not added channels message"
+msgstr ""
+
+msgid "add owned channel button"
+msgstr ""
+
+# Добавление своего канала
+msgid "input owned channel message"
+msgstr ""
+
+msgid "add owned channel choose type message"
+msgstr ""
+
+msgid "add owned channel community type button"
+msgstr ""
+
+msgid "add owned channel blog type button"
+msgstr ""
+
+msgid "check add owned channel message"
+msgstr ""
+
+msgid "add owned channel success message"
+msgstr ""
+
+msgid "add owned channel failure message"
+msgstr ""
+
+# Управление каналом
+
+
+########## Предложение поста ##########

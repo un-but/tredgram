@@ -8,7 +8,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Update
 from aiogram.utils.i18n import ConstI18nMiddleware, I18n
 from fastapi import FastAPI, Request
-from tredgram.bot.routers import handlers
+from tredgram.bot.routers import admin, user
 from tredgram.schemas import SuccessResponse, config
 
 logger = logging.getLogger("virtual_assistant")
@@ -17,7 +17,7 @@ dp = Dispatcher()
 
 i18n = I18n(path="locales", default_locale="ru", domain="messages")
 
-dp.include_router(handlers.router)
+dp.include_routers(user.router, admin.router)
 dp.update.middleware(
     ConstI18nMiddleware(locale="ru", i18n=i18n),  # Replace when add new languages
 )

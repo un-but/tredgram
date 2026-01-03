@@ -4,9 +4,12 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
-
 from app.db import db_delete, db_read, db_update
-from app.keyboards import admin_panel_keyboard, ban_or_unban_inline_keyboard, delete_user_info_keyboard
+from app.keyboards import (
+    admin_panel_keyboard,
+    ban_or_unban_inline_keyboard,
+    delete_user_info_keyboard,
+)
 from app.states import Ban_Or_Unban, DeleteUserInfo, MessageInfo, ProhibitSending
 from constants import ADMINS_ID
 
@@ -36,11 +39,14 @@ async def send_info_about_user(message: Message, state: FSMContext) -> None:
     await state.clear()
     user_info = await db_read.get_user_info_by_message_id(message)
     if user_info:
-        await message.answer((f"Ник - {user_info[1]!s}\n"
-                            f"ID - {user_info[2]}\n"
-                            f"Имя - {str(user_info[3]) + " " + str(user_info[4])}\n"
-                            f"Язык - {user_info[5]}\n"
-                            f"Блокировка - {user_info[6] == 1}").replace("None", ""),
+        await message.answer(
+            (
+                f"Ник - {user_info[1]!s}\n"
+                f"ID - {user_info[2]}\n"
+                f"Имя - {str(user_info[3]) + ' ' + str(user_info[4])}\n"
+                f"Язык - {user_info[5]}\n"
+                f"Блокировка - {user_info[6] == 1}"
+            ).replace("None", ""),
         )
     else:
         await message.answer(
@@ -53,7 +59,7 @@ async def send_info_about_user(message: Message, state: FSMContext) -> None:
 async def prohibit_sending_button_handler(message: Message, state: FSMContext) -> None:
     await state.set_state(ProhibitSending.next_step)
     await message.answer(
-        "Введите время блокировки в формате \"4s\", где 4 это количество, а s это единица измерения времени (s - секунды, m - минуты, h - часы, d - дни):",
+        'Введите время блокировки в формате "4s", где 4 это количество, а s это единица измерения времени (s - секунды, m - минуты, h - часы, d - дни):',
     )
 
 
@@ -67,7 +73,7 @@ async def prohibit_sending_for_minutes(message: Message, state: FSMContext) -> N
         prohibit_sending_time = message.date.timestamp() + int(seconds) * literals[literal]
         await db_update.set_prohibit_sending_time(prohibit_sending_time)
         await message.answer(
-            f"Запрет на отправку сообщений будет действовать до {datetime.fromtimestamp(prohibit_sending_time).strftime("%H:%M:%S %d.%m.%Y")}.",
+            f"Запрет на отправку сообщений будет действовать до {datetime.fromtimestamp(prohibit_sending_time).strftime('%H:%M:%S %d.%m.%Y')}.",
         )
     else:
         await message.answer(
@@ -99,7 +105,9 @@ async def ban_or_unban_user(message: Message, state: FSMContext) -> None:
     await state.clear()
     if await db_update.set_is_banned_value(message.text, is_banned):
         await message.answer(
-            "Пользователь успешно заблокирован" if is_banned == 1 else "Пользователь успешно разблокирован",
+            "Пользователь успешно заблокирован"
+            if is_banned == 1
+            else "Пользователь успешно разблокирован",
         )
     else:
         await message.answer(
